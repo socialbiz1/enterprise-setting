@@ -1,2 +1,0 @@
-# enterprise-setting
-enterprise setting
