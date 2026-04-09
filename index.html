@@ -983,7 +983,7 @@
 
   /* ── FORM SUBMIT ── */
   // Google Apps Script 웹훅 URL (배포 후 여기에 입력)
-  const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbG_G8bSsWSgUEXkiakG3xXjDtVVpmkyIDIp89Rbc6W1w0cfr30vEUGHbRC0zhxJuzXg/exec';
 
   document.getElementById('setupForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -1002,7 +1002,7 @@
     ).map(cb => cb.value).join(', ');
     sheetData['제출_시간'] = new Date().toLocaleString('ko-KR');
 
-    if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL') {
+    if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzbG_G8bSsWSgUEXkiakG3xXjDtVVpmkyIDIp89Rbc6W1w0cfr30vEUGHbRC0zhxJuzXg/exec') {
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
