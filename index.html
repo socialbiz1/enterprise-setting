@@ -1002,36 +1002,29 @@
     ).map(cb => cb.value).join(', ');
     sheetData['제출_시간'] = new Date().toLocaleString('ko-KR');
 
-    if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzbG_G8bSsWSgUEXkiakG3xXjDtVVpmkyIDIp89Rbc6W1w0cfr30vEUGHbRC0zhxJuzXg/exec') {
-      fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(sheetData)
-      }).catch(err => console.warn('Sheets 전송 실패:', err));
-    }
-
     // ── 이메일 전송 (FormSubmit.co) ──
     try {
-      const res = await fetch('https://formsubmit.co/ajax/yonghwan.kim@nhndata.com', {
+      await fetch('https://formsubmit.co/ajax/yonghwan.kim@nhndata.com', {
         method: 'POST',
         headers: { 'Accept': 'application/json' },
         body: formData
       });
-      const json = await res.json();
-      if (json.success === 'true' || json.success === true) {
-        showSuccess();
-      } else {
-        throw new Error();
-      }
-    } catch {
-      // fallback: mailto
-      const body = Object.entries(sheetData)
-        .filter(([k]) => !k.startsWith('_'))
-        .map(([k, v]) => `${k}: ${v}`)
-        .join('\n');
-      window.location.href = `mailto:yonghwan.kim@nhndata.com?subject=${encodeURIComponent('[SocialBiz] 엔터프라이즈 세팅 대행 신청')}&body=${encodeURIComponent(body)}`;
+    } catch (err) {
+      console.warn('FormSubmit 오류:', err);
     }
+
+    // ── Google Sheets 저장 (Apps Script) ──
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(sheetData)
+      });
+    } catch (err) {
+      console.warn('Sheets 전송 실패:', err);
+    }
+
+    showSuccess();
 
     btn.disabled = false;
     btn.textContent = '세팅 대행 신청하기 →';
